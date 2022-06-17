@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Person extends Model implements JWTSubject
+class Person extends Authenticatable implements JWTSubject
 {
     use HasFactory;
     // Define our person model

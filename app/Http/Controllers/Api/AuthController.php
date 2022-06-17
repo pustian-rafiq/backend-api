@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Person;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -58,6 +59,72 @@ class AuthController extends Controller
                 "errors" => $err
             ],401);
         }
+    }
+
+     /**
+      * Check validation for login request informations
+      * This method loggedin an existing user
+      * Generate a jwt token for protection the other routes
+      * Route: api/auth/login
+     */
+
+    public function login(Request $request)
+    {
+         //Validate person data
+         $validator = Validator::make($request->all(),[
+            "email" => "required|email",
+            "password" => "required|min:6"
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                "success" => false,
+                "errors" => $validator->errors()
+            ],401);
+        }
+
+        try{
+            $credentials = $request->only('email', 'password');
+
+            if ($token = $this->guard()->attempt($credentials)) {
+                return $this->respondWithToken( $credentials, $token);
+            }
+    
+            return response()->json(['error' => 'Unauthorized'], 401);
+
+        }catch(Exception $error){
+                return response()->json([
+                "success" => false,
+                "errors" => $error
+            ],401);
+        }
        
+    }
+
+
+      /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken( $credentials, $token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            "person" =>  $credentials
+
+        ]);
+    }
+
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\Guard
+     */
+    public function guard()
+    {
+        return Auth::guard();
     }
 }
