@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Person extends Authenticatable implements JWTSubject
+class Person extends Model implements JWTSubject
 {
     use HasFactory;
-
+    // Define our person model
+    protected $table = 'persons';
+    
     protected $fillable =[
         'firstName','lastName','email','password'
     ];
