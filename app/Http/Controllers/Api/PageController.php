@@ -12,7 +12,7 @@ class PageController extends Controller
 
      /**
       * Check validation for page request data
-      * This method create a new page for logged in users
+      * This method create a new page for logged in persons
       * Route: api/page/create
      */
 
