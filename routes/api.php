@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,11 +20,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+//Person routes
 Route::prefix('auth')->group(function (){
 
     Route::post("/login",[AuthController::class, 'login']);
     Route::post("/register",[AuthController::class, 'register']);
-    
    
+});
+
+//Page routes
+Route::group(['middleware'=>'auth:api','prefix'=>'page'], function($router) {
+    Route::post("/create",[PageController::class, 'store']);
 });

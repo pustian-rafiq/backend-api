@@ -70,7 +70,6 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-         //Validate person data
          $validator = Validator::make($request->all(),[
             "email" => "required|email",
             "password" => "required|min:6"
@@ -83,6 +82,7 @@ class AuthController extends Controller
             ],401);
         }
 
+        
         try{
             $credentials = $request->only('email', 'password');
 
